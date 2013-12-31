@@ -278,6 +278,8 @@ ice.factory('highchart', function() {
 ice.factory('usage_db', function($window, $http, $filter) {
 
   var graphonly = false;
+  var resourcegroup = "Component";
+  var applicationgroup = "Project";
 
   var retrieveNamesIfNotAll = function(array, selected, preselected, filter) {
     if (!selected && !preselected)
@@ -331,6 +333,15 @@ ice.factory('usage_db', function($window, $http, $filter) {
     graphOnly: function() {
       return graphonly;
     },
+
+    resourceGroup: function() {
+      return resourcegroup;
+    },
+
+    applicationGroup: function() {
+      return applicationgroup;
+    },
+
     addParams: function(params, name, array, selected, preselected, filter) {
       var selected = retrieveNamesIfNotAll(array, selected, preselected, filter);
       if (selected)
@@ -458,7 +469,7 @@ ice.factory('usage_db', function($window, $http, $filter) {
       }
       if (!$scope.showResourceGroups) {
         for (var j in $scope.groupBys) {
-          if ($scope.groupBys[j].name === "ResourceGroup") {
+          if ($scope.groupBys[j].name === resourcegroup) {
             $scope.groupBys.splice(j, 1);
             break;
           }
@@ -1008,7 +1019,7 @@ function detailCtrl($scope, $location, $http, usage_db, highchart) {
     {name: "Account"},
     {name: "Region"},
     {name: "Product"},
-    {name: "ResourceGroup"},
+    {name: usage_db.resourceGroup()},
     {name: "Operation"},
     {name: "UsageType"}
   ],
@@ -1180,7 +1191,7 @@ function appgroupCtrl($scope, $location, $http, usage_db, highchart) {
     {name: "Account"},
     {name: "Region"},
     {name: "Product"},
-    {name: "ResourceGroup"},
+    {name: usage_db.resourceGroup()},
     {name: "Operation"},
     {name: "UsageType"}
   ],
@@ -1332,7 +1343,7 @@ function breakdownCtrl($scope, $location, $http, usage_db, highchart) {
   $scope.showResourceGroups = true;
   $scope.usage_cost = "cost";
 
-  $scope.groupBys = [{name: "ResourceGroup"}, {name: "ApplicationGroup"}];
+  $scope.groupBys = [{name: usage_db.resourceGroup()}, {name: usage_db.applicationGroup()}];
   $scope.groupBy = $scope.groupBys[0];
   $scope.consolidate = "weekly";
   $scope.end = new Date();
